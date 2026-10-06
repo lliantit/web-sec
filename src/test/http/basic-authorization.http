@@ -52,7 +52,7 @@ Authorization: Basic admin admin
 
 
 
-### 1. GET ALL  - Невірний пароль (401 Unauthorized)
+### 1. GET ALL
 GET http://localhost:8080/api/v1/cars
 Authorization: Basic admin wrongpassword
 Accept: application/json
