@@ -1,0 +1,91 @@
+
+### GET ALL
+GET http://localhost:8080/api/v1/cars
+Authorization: Basic admin admin
+Accept: application/json
+
+###
+
+### 2. GET CAR BY ID
+GET http://localhost:8080/api/v1/cars/1
+Authorization: Basic admin admin
+Accept: application/json
+
+###
+
+
+
+
+### 3. CREATE
+POST http://localhost:8080/api/v1/cars
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "name": "BMW M5",
+  "year": 2024,
+  "description": "High-performance sedan",
+  "color": "Black"
+}
+
+###
+
+### 4. UPDATE  Повне оновлення даних авто
+PUT http://localhost:8080/api/v1/cars/1
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "name": "BMW M5 Competition",
+  "year": 2024,
+  "description": "Updated high-performance sedan",
+  "color": "Frozen Dark Grey"
+}
+
+###
+
+### 5. DELETE CAR - Видалення авто за ID
+DELETE http://localhost:8080/api/v1/cars/1
+Authorization: Basic admin admin
+
+###
+
+
+
+### 1. GET ALL  - Невірний пароль (401 Unauthorized)
+GET http://localhost:8080/api/v1/cars
+Authorization: Basic admin wrongpassword
+Accept: application/json
+
+###
+
+### 2. GET CAR BY ID
+GET http://localhost:8080/api/v1/cars/1
+Accept: application/json
+
+###
+
+### 3. CREATE
+POST http://localhost:8080/api/v1/cars
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "description": "Авто без назви та року випуску"
+}
+
+###
+
+### 4. GET CAR BY ID - not found id
+GET http://localhost:8080/api/v1/cars/999999
+Authorization: Basic admin admin
+Accept: application/json
+
+###
+
+
+### 5. DELETE CAR - Access denied
+DELETE http://localhost:8080/api/v1/cars/1
+Authorization: Basic user user
+
+###
