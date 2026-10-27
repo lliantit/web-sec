@@ -1,13 +1,18 @@
 package chnu.edu.websec.service;
-
 import chnu.edu.websec.model.Car;
+import chnu.edu.websec.repository.CarRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CarService {
+
+    private final CarRepository carRepository;
 
     private static List<Car> cars = new ArrayList<>();
 
@@ -19,38 +24,39 @@ public class CarService {
         cars.add(new Car("5", "Tesla Model 3", "2025", "Electric sedan", "Red"));
     }
 
-    public List<Car> getAllCars() {
-        return cars;
+    @PostConstruct
+    void init() {
+        carRepository.deleteAll();
+        carRepository.saveAll(cars);
     }
 
-    public static Car getCar(String id) {
-        return cars.stream()
-                .filter(car -> car.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+
+
+    public List<Car> getAllCars() {
+        return carRepository.findAll();
+    }
+
+    public Car getCar(String id) {
+        return carRepository.findById(id).orElse(null);
     }
 
     public Car createCar(Car car) {
-        cars.add(car);
-        return car;
+        return carRepository.save(car);
     }
 
     public Car updateCar(Car car) {
-        Car oldCar = getCar(car.getId());
-
-        if (oldCar != null) {
-            cars.remove(oldCar);
-            cars.add(car);
+        Car existing = carRepository.findById(car.getId()).orElse(null);
+        if (existing != null) {
+            existing.setName(car.getName());
+            existing.setYear(car.getYear());
+            existing.setDescription(car.getDescription());
+            existing.setColor(car.getColor());
+            return carRepository.save(existing);
         }
-
-        return car;
+        return null;
     }
 
-    public static void deleteCar(String id) {
-        Car car = getCar(id);
-
-        if (car != null) {
-            cars.remove(car);
-        }
+    public void deleteCar(String id) {
+        carRepository.deleteById(id);
     }
 }
