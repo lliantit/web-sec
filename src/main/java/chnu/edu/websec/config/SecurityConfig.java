@@ -2,7 +2,6 @@ package chnu.edu.websec.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,17 +28,7 @@ public class SecurityConfig {
                         // публічний доступ
                         .requestMatchers("/", "/index.html").permitAll()
 
-                        // тестові маршрути (визначені вище загального патерну /api/v1/cars/**)
-                        .requestMatchers("/api/v1/cars/hello/admin").hasAnyRole("ADMIN", "SUPERADMIN")
-                        .requestMatchers("/api/v1/cars/hello/user").hasRole("USER")
-                        .requestMatchers("/api/v1/cars/hello/man").hasAnyRole("USER", "ADMIN", "SUPERADMIN")
-
-                        // REST CRUD операції
-                        .requestMatchers(HttpMethod.GET, "/api/v1/cars", "/api/v1/cars/**").hasAnyRole("USER", "ADMIN", "SUPERADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/cars").hasAnyRole("ADMIN", "SUPERADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/cars", "/api/v1/cars/**").hasAnyRole("ADMIN", "SUPERADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/cars/**").hasRole("SUPERADMIN")
-
+                        // доступ до /api/v1/cars/** контролюється анотаціями @PreAuthorize у CarController
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

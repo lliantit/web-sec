@@ -25,31 +25,38 @@ import java.util.List;
 public class CarController {
     private final CarService carService;
 
-        @GetMapping
-        public List<Car> getAllCar(String id) {
-            return carService.getAllCars();
-        }
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPERADMIN')")
+    @GetMapping
+    public List<Car> getAllCar(String id) {
+        return carService.getAllCars();
+    }
 
-        @GetMapping("/{id}")
-        public Car getCar(@PathVariable String id) {
-            return carService.getCar(id);
-        }
-        @PostMapping
-        public Car createCar(@RequestBody Car car) {
-            return carService.createCar(car);
-        }
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPERADMIN')")
+    @GetMapping("/{id}")
+    public Car getCar(@PathVariable String id) {
+        return carService.getCar(id);
+    }
 
-        @PutMapping
-        public Car updateCar(@RequestBody Car car) {
-            return carService.updateCar(car);
-        }
-        @DeleteMapping("/{id}")
-        public void deleteCar(@PathVariable String id) {
-            carService.deleteCar(id);
-        }
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PostMapping
+    public Car createCar(@RequestBody Car car) {
+        return carService.createCar(car);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PutMapping
+    public Car updateCar(@RequestBody Car car) {
+        return carService.updateCar(car);
+    }
+
+    @PreAuthorize("hasRole('SUPERADMIN')")
+    @DeleteMapping("/{id}")
+    public void deleteCar(@PathVariable String id) {
+        carService.deleteCar(id);
+    }
 
     //----------------------------------------------------
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("hello/admin")
     public String helloAdmin() {
         return "Hello Admin!";
@@ -68,8 +75,5 @@ public class CarController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPERADMIN')")
     @GetMapping("/hello/man")
     public String helloMan() { return "Hello, man!"; }
-
-
-
 
 }
