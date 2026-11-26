@@ -1,0 +1,51 @@
+### Task 6. Annotations - 10 requests via different users (@PreAuthorize in CarController)
+@host = http://localhost:8081
+@auth_user = Basic dXNlcjp1c2Vy
+@auth_admin = Basic YWRtaW46YWRtaW4=
+@auth_superadmin = Basic c3VwZXJhZG1pbjpzdXBlcmFkbWlu
+
+### 1. USER -> GET /hello/user (200)
+GET {{host}}/api/v1/cars/hello/user
+Authorization: {{auth_user}}
+
+### 2. ADMIN -> GET /hello/user (403)
+GET {{host}}/api/v1/cars/hello/user
+Authorization: {{auth_admin}}
+
+### 3. ADMIN -> GET /hello/admin (200)
+GET {{host}}/api/v1/cars/hello/admin
+Authorization: {{auth_admin}}
+
+### 4. USER -> GET /hello/admin (403)
+GET {{host}}/api/v1/cars/hello/admin
+Authorization: {{auth_user}}
+
+### 5. SUPERADMIN -> GET /hello/man (200)
+GET {{host}}/api/v1/cars/hello/man
+Authorization: {{auth_superadmin}}
+
+### 6. USER -> GET /cars (200)
+GET {{host}}/api/v1/cars
+Authorization: {{auth_user}}
+
+### 7. USER -> POST /cars (403)
+POST {{host}}/api/v1/cars
+Authorization: {{auth_user}}
+Content-Type: application/json
+
+{ "name": "Tesla Model S", "price": 80000 }
+
+### 8. ADMIN -> POST /cars (200)
+POST {{host}}/api/v1/cars
+Authorization: {{auth_admin}}
+Content-Type: application/json
+
+{ "name": "BMW M5", "price": 105000 }
+
+### 9. ADMIN -> DELETE /cars/1 (403)
+DELETE {{host}}/api/v1/cars/1
+Authorization: {{auth_admin}}
+
+### 10. SUPERADMIN -> DELETE /cars/1 (200)
+DELETE {{host}}/api/v1/cars/1
+Authorization: {{auth_superadmin}}
